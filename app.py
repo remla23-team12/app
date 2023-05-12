@@ -10,23 +10,21 @@ model_service_url = os.environ.get("MODEL_SERVICE_URL", "http://localhost:8080")
 total_predictions = Counter("total_predictions", "Total Predictions")
 correct_predictions = Counter("correct_predictions", "Correct Predictions")
 prediction_accuracy = Gauge("prediction_accuracy", "Prediction Accuracy")
-prediction_duration_seconds = Histogram(
-    "prediction_duration_seconds", "Prediction duration seconds"
+prediction_accuracy_changes = Histogram(
+    "prediction_accuracy_changes", "prediction_accuracy_changes"
 )
 prediction_duration_summary = Summary(
-    "prediction_duration_summary", "Prediction duration summary"
+    "prediction_duration_summary", "Prediction duration counts and seconds summary"
 )
 
 
-@prediction_duration_seconds.time()
-@prediction_duration_summary.time()
 @app.route("/", methods=["GET", "POST"])
 def index():
     global total_predictions, correct_predictions
     if request.method == "POST":
         review = request.form["review"]
         payload = {"msg": review}
-        response = requests.post(f"{model_service_url}/", json=payload)
+        response = make_prediction(payload)
         data = response.json()
         total_predictions.inc()
         return jsonify(data)
@@ -34,15 +32,28 @@ def index():
     return render_template("index.html")
 
 
+@prediction_duration_summary.time()
+def make_prediction(payload):
+    # Here you make your prediction
+    response = requests.post(f"{model_service_url}/", json=payload)
+    return response
+
+
 @app.route("/correctness", methods=["POST"])
 def correctness():
     user_feedback = request.json.get("correct", False)
     if user_feedback:
         correct_predictions.inc()
+    # if not this way TypeError: unsupported operand type(s) for /: mutex and mutex
+    correct_predictions_value = int(correct_predictions._value._value)
+    total_predictions_value = int(total_predictions._value._value)
     prediction_accuracy.set(
-        correct_predictions._value / total_predictions._value
-        if total_predictions._value
+        correct_predictions_value / total_predictions_value
+        if total_predictions_value
         else 0
+    )
+    prediction_accuracy_changes.observe(
+        correct_predictions_value / total_predictions_value
     )
     return jsonify({"status": "success"})
 
