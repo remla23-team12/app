@@ -12,6 +12,8 @@
         <button type="submit">Submit</button>
     </form>
     <div id="result"></div>
+    <button id="correctButton" onclick="submitCorrectness(true);" style="display: none;">Correct</button>
+    <button id="incorrectButton" onclick="submitCorrectness(false);" style="display: none;">Incorrect</button>
 
     <script>
         async function submitReview() {
@@ -23,6 +25,20 @@
             const data = await response.json();
             const smiley = data.result === 1 ? ":D" : ":(";
             document.getElementById("result").innerHTML = smiley;
+            document.getElementById("correctButton").style.display = "block";
+            document.getElementById("incorrectButton").style.display = "block";
+        }
+
+        async function submitCorrectness(correct) {
+            const response = await fetch("/correctness", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ correct: correct })
+            });
+            document.getElementById("correctButton").style.display = "none";
+            document.getElementById("incorrectButton").style.display = "none";
         }
     </script>
 </body>

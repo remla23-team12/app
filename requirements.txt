@@ -1,2 +1,4 @@
 Flask==2.2.4
 requests==2.26.0
+prometheus_client
+uwsgi
