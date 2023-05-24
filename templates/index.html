@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sentiment Analysis</title>
+    <title>Sentiment Analysis app Version 0.1.0</title>
 </head>
 <body>
-    <h1>Enter a restaurant review, express your feeling subjectively start with "I":</h1>
+    <h1>Enter a restaurant review</h1>
     <form onsubmit="event.preventDefault(); submitReview();">
         <textarea id="review" name="review" rows="4" cols="50"></textarea>
         <button type="submit">Submit</button>
     </form>
     <div id="result"></div>
+    <div id="lib-version"></div>  <!-- New element to display library version -->
     <button id="correctButton" onclick="submitCorrectness(true);" style="display: none;">Correct</button>
     <button id="incorrectButton" onclick="submitCorrectness(false);" style="display: none;">Incorrect</button>
 
@@ -27,6 +28,9 @@
             document.getElementById("result").innerHTML = smiley;
             document.getElementById("correctButton").style.display = "block";
             document.getElementById("incorrectButton").style.display = "block";
+
+            const libVersion = data.lib_version;
+            document.getElementById("lib-version").innerText = 'Library version: ' + libVersion;
         }
 
         async function submitCorrectness(correct) {
