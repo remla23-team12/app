@@ -5,15 +5,17 @@ WORKDIR /root/
 
 COPY requirements.txt /root/
 
-RUN python -m pip install --upgrade pip &&\
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends build-essential && \
+    python -m pip install --upgrade pip &&\
     pip install -r requirements.txt
 
 COPY app.py /root/
 COPY templates /root/templates/
+# # Install uwsgi Python web server gateway interface
+# RUN pip install uwsgi
 
-
-ENTRYPOINT ["python"]
-CMD ["app.py"]
+ENTRYPOINT ["/usr/local/bin/uwsgi", "--http", "0.0.0.0:5000", "--wsgi-file", "app.py", "--callable", "app"]
 
 # this is a model service container we need to expose the PORT which is used to access this service!!!!
 
