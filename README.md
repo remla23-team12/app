@@ -11,3 +11,8 @@ To run the application locally using Docker Compose, use this command:
 ```
 docker-compose up --build
 ```
+
+### Website Url
+```
+localhost:8081
+```
