@@ -1,4 +1,13 @@
-# app
-Not Linked with Lib though, gonna ask for feedback
----
-The front-end requires the model-service container to be up and running, in the [README.MD](https://github.com/remla23-team12/operation) of our operation repository, one can find the instructions for composing the whole app.
+### app
+This repository contains the web application of our project.
+
+### Prerequisites
+
+You need to have Docker, Docker Compose, and Kubernetes (if deploying on k8s) installed on your local machine.
+
+### Running Locally
+
+To run the application locally using Docker Compose, use this command:
+```
+docker-compose up --build
+```
