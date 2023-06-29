@@ -12,7 +12,7 @@ To run the application (first clone this repository and enter the root folder) l
 docker build -t <TAG_NAME> .
 ```
 
-You can choose an option tagname for the docker build. Now enter the following command (with the same tagname used earlier:
+You can choose an option tagname for the docker build. Now enter the following command (with the same tagname used earlier):
 ```
 docker run -it --rm -p 8081:5000 <TAG_NAME>
 ```
