@@ -9,7 +9,12 @@ You need to have Docker, Docker Compose, and Kubernetes (if deploying on k8s) in
 
 To run the application locally using Docker Compose, use this command:
 ```
-docker-compose up --build
+docker build -t <TAG_NAME> .
+```
+You can choose an option tagname for the docker build. Now enter the following command (with the same tagname used earlier:
+
+```
+docker run -it --rm -p 8081:5000 <TAG_NAME>
 ```
 
 ### Website Url
